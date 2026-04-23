@@ -1,0 +1,20 @@
+Vấn đề với useItems() hook hiện tại:
+
+ListPage          AddPage           EditPage
+useItems()        useItems()        useItems()
+   ↓                  ↓                 ↓
+items riêng       items riêng       items riêng
+(3 bản sao)       (3 bản sao)       (3 bản sao)
+
+→ Thêm ở AddPage xong navigate về ListPage
+→ ListPage gọi fetchAll() lại từ localStorage
+→ Chậm, không sync realtime
+
+Redux giải quyết:
+
+         Redux Store (1 nguồn duy nhất)
+               items: [...]
+              /         |         \
+        ListPage    AddPage    EditPage
+        đọc store   ghi store  ghi store
+→ Thay đổi 1 nơi → mọi nơi cập nhật ngay, không cần fetch lại
